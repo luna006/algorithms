@@ -1,29 +1,40 @@
 CXX := g++
 CXXFLAGS := --std=c++11
 
+ALG_SRC_DIR := $(CURDIR)/../../src
+SORT_SRC_DIR := $(ALG_SRC_DIR)/sort
 GTEST_DIR := $(CURDIR)/../googletest/googletest
 GMOCK_DIR := $(CURDIR)/../googletest/googlemock
 
 
-INCLUDES := \
-			-I$(GTEST_DIR)/include \
-			-I$(GMOCK_DIR)/include
+INCLUDES :=                \
+	-I$(GTEST_DIR)/include \
+	-I$(GMOCK_DIR)/include \
+	-I$(SORT_SRC_DIR)
 
 LIBS := \
-			-lpthread
+	-lpthread
 
 MAIN_CC := \
-			main.cc
+	main.cc
 
-MAIN_OBJ := $(MAIN_CC:.cc=.o) \
-			gtest.o           \
-			gmock.o
+SORT_CC := \
+	test_sort.cc \
+	$(wildcard $(SORT_SRC_DIR)/*.cc)
 
-BIN := gtest.app
+MAIN_OBJ :=           \
+	$(MAIN_CC:%.cc=%.o) \
+	gtest.o           \
+	gmock.o
+
+SORT_OBJ := $(SORT_CC:%.cc=%.o)
+
+
+BIN := gtestSort.app
 
 build: $(BIN)
 
-$(BIN): $(MAIN_OBJ)
+gtestSort.app: $(MAIN_OBJ) $(SORT_OBJ)
 	$(CXX) -o $@ $^ $(LIBS)
 
 %.o: %.cc

@@ -1,6 +1,6 @@
 #include <cstring>
 
-#include <sort.h>
+#include "sort.h"
 
 void mergeSort(int* array, std::size_t n) {
     if (n == 1) {
