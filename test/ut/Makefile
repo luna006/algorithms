@@ -1,6 +1,14 @@
 CXX := g++
 CXXFLAGS := --std=c++11
 
+debug ?= ""
+
+ifeq ($(debug), on)
+	CXXFLAGS += -g
+endif
+
+$(info $(CXXFLAGS))
+
 ALG_SRC_DIR := $(CURDIR)/../../src
 SORT_SRC_DIR := $(ALG_SRC_DIR)/sort
 GTEST_DIR := $(CURDIR)/../googletest/googletest
@@ -30,9 +38,11 @@ MAIN_OBJ :=           \
 SORT_OBJ := $(SORT_CC:%.cc=%.o)
 
 
-BIN := gtestSort.app
+SORT_BIN := gtestSort.app
 
-build: $(BIN)
+build: $(SORT_BIN)
+
+buildTestSort: $(SORT_BIN)
 
 gtestSort.app: $(MAIN_OBJ) $(SORT_OBJ)
 	$(CXX) -o $@ $^ $(LIBS)

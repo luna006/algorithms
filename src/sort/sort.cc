@@ -2,7 +2,7 @@
 
 #include "sort.h"
 
-void mergeSort(int* array, std::size_t n) {
+void mergeSort(int* array, const std::size_t n) {
     if (n == 1) {
         return;
     }
