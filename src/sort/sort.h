@@ -25,4 +25,24 @@ template<typename T> void selectSort(T* array, const std::size_t n) {
     }
 }
 
+template<typename T> std::size_t partition(T* array, const std::size_t l, const std::size_t r) {
+    T baseEl = array[r - 1];
+    std::size_t i = l;
+    for (std::size_t j = l; j < r - 1; j++) {
+        if (array[j] <= baseEl) {
+            std::swap(array[i++], array[j]);
+        }
+    }
+    std::swap(array[i], array[r - 1]);
+    return i;
+}
+
+template<typename T> void quickSort(T* array, const std::size_t l, const std::size_t r) {
+    if (l < r) {
+        std::size_t q = partition(array, l, r);
+        quickSort(array, l, q);
+        quickSort(array, q + 1, r);
+    }
+}
+
 void mergeSort(int* array, const std::size_t n);
