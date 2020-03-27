@@ -59,3 +59,4 @@ gmock.o: $(GMOCK_DIR)/src/gmock-all.cc
 clean:
 	find $(CURDIR) -name '*.o' -exec rm -f {} +
 	find $(CURDIR) -name '*.app' -exec rm -f {} +
+	find $(ALG_SRC_DIR) -name '*.o' -exec rm -f {} +
