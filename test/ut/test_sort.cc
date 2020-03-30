@@ -1,7 +1,8 @@
 #include <cstddef>
 #include <vector>
-#include <gtest/gtest.h>
-#include <sort.h>
+#include "sort.h"
+#include "gtest/gtest.h"
+
 
 class SortTest : public ::testing::Test {
 protected:

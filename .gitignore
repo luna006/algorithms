@@ -35,3 +35,4 @@
 testSort
 *.[oa]
 *.~
+cmake-build-debug
