@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <deque>
 #include "graph.h"
 
 Graph::~Graph() {
@@ -55,4 +56,28 @@ void Graph::printPath(const std::string &destinationName) const {
         std::cout << "Vertex " << destinationName << " is unreachable";
     }
     std::cout << std::endl;
+}
+
+void Graph::unweighted(const std::string &startName) {
+    auto iterator = vertexMap.find(startName);
+    if (iterator == vertexMap.cend()) {
+        throw std::invalid_argument("Vertex " + startName + " was not found");
+    }
+    clear();
+    Vertex* startVertex = iterator->second;
+    startVertex->distance = 0.0;
+    std::deque<Vertex*> queue;
+    queue.push_back(startVertex);
+    while (!queue.empty()) {
+        Vertex* currentVertex = queue.front();
+        queue.pop_front();
+        for (Edge edge: currentVertex->adjacentVertices) {
+            Vertex* adjacentVertex = edge.dest;
+            if (adjacentVertex->distance == INFINITY) {
+                adjacentVertex->distance = currentVertex->distance + 1;
+                adjacentVertex->previousVertex = currentVertex;
+                queue.push_back(adjacentVertex);
+            }
+        }
+    }
 }

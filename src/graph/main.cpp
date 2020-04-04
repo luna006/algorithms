@@ -6,9 +6,10 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <stdexcept>
 #include "graph.h"
 
-bool processRequest(std::istream& inStream, Graph& graph);
+void processRequest(std::istream& inStream, Graph& graph);
 
 int main(int argc, const char** argv) {
     if (argc != 2) {
@@ -36,12 +37,34 @@ int main(int argc, const char** argv) {
         }
     }
     std::cout << "File read" << std::endl << std::endl;
-    while (processRequest(std::cin, graph)) {
-        ;
-    }
+    bool isContinue = true;
+    std::string userInput;
+    do {
+        try {
+            processRequest(std::cin, graph);
+        } catch (std::invalid_argument& e) {
+            std::cerr << e.what() << std::endl;
+        }
+        std::cout << "Enter \'c\' to continue or \'q\' for quit: ";
+        std::cin >> userInput;
+        if (userInput != "c") {
+            isContinue = false;
+        }
+    } while (isContinue);
     return 0;
 }
 
-bool processRequest(std::istream& inStream, Graph& graph) {
-    return false;
+void processRequest(std::istream& inStream, Graph& graph) {
+    std::string startVertexName;
+    std::string destinationVertexName;
+    std::cout << "Enter name of start node: ";
+    if (!(inStream >> startVertexName)) {
+        throw std::invalid_argument("Cannot read name of start node");
+    }
+    std::cout << "Enter name of destination node: ";
+    if (!(inStream >> destinationVertexName)) {
+        throw std::invalid_argument("Cannot read name of destination node");
+    }
+    graph.unweighted(startVertexName);
+    graph.printPath(destinationVertexName);
 }

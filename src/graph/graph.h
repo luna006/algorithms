@@ -20,7 +20,7 @@ public:
 
     void addEdge(const std::string& sourceName, const std::string& destinationName, double cost);
     void printPath(const std::string& destinationName) const;
-    //void unweighted(const std::string& startName);
+    void unweighted(const std::string& startName);
     //void dijkstra(const std::string& startName);
     //void negative(const std::string& startName);
     //void acyclic(const std::string& startName);
