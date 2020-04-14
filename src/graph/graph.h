@@ -20,8 +20,8 @@ public:
 
     void addEdge(const std::string& sourceName, const std::string& destinationName, double cost);
     void printPath(const std::string& destinationName) const;
-    void unweighted(const std::string& startName);
-    //void dijkstra(const std::string& startName);
+    void unweighted(const std::string& startVertexName);
+    void dijkstra(const std::string& startVertexName);
     //void negative(const std::string& startName);
     //void acyclic(const std::string& startName);
 private:
@@ -31,6 +31,13 @@ private:
         double cost;
 
         explicit Edge(Vertex* dest = nullptr, double cost = 0.0) : dest(dest), cost(cost) {}
+
+        bool operator<(const Edge& otherEdge) const {
+            return cost < otherEdge.cost;
+        }
+        bool  operator>(const Edge& otherEdge) const {
+            return cost > otherEdge.cost;
+        }
     };
 
     struct Vertex {

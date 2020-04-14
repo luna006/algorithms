@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <deque>
+#include <queue>
 #include "graph.h"
 
 Graph::~Graph() {
@@ -58,10 +59,10 @@ void Graph::printPath(const std::string &destinationName) const {
     std::cout << std::endl;
 }
 
-void Graph::unweighted(const std::string &startName) {
-    auto iterator = vertexMap.find(startName);
+void Graph::unweighted(const std::string &startVertexName) {
+    auto iterator = vertexMap.find(startVertexName);
     if (iterator == vertexMap.cend()) {
-        throw std::invalid_argument("Vertex " + startName + " was not found");
+        throw std::invalid_argument("Vertex " + startVertexName + " was not found");
     }
     clear();
     Vertex* startVertex = iterator->second;
@@ -77,6 +78,39 @@ void Graph::unweighted(const std::string &startName) {
                 adjacentVertex->distance = currentVertex->distance + 1;
                 adjacentVertex->previousVertex = currentVertex;
                 queue.push_back(adjacentVertex);
+            }
+        }
+    }
+}
+
+void Graph::dijkstra(const std::string &startVertexName) {
+    auto iterator = vertexMap.find(startVertexName);
+    if (iterator == vertexMap.cend()) {
+        throw std::invalid_argument("Vertex " + startVertexName + " was not found");
+    }
+    clear();
+    Vertex* startVertex = iterator->second;
+    startVertex->distance = 0;
+    std::priority_queue<Edge, std::vector<Edge>, std::greater<Edge>> pqueue;
+    pqueue.push(Edge(startVertex, startVertex->distance));
+    Edge currentEdge;
+    for (VertexMap::size_type i = 0; i < vertexMap.size(); i++) {
+        do {
+            if (!pqueue.empty()) {
+                currentEdge = pqueue.top();
+                pqueue.pop();
+            }
+        } while (currentEdge.dest->scratch != 0);
+        Vertex* currentVertex = currentEdge.dest;
+        currentVertex->scratch = 1;
+        for (Edge& edge : currentVertex->adjacentVertices) {
+            if (edge.cost < 0) {
+                throw std::invalid_argument("Negative cost of edge");
+            }
+            if (edge.dest->distance > currentVertex->distance + edge.cost) {
+                edge.dest->distance = currentVertex->distance + edge.cost;
+                edge.dest->previousVertex = currentVertex;
+                pqueue.push(std::move(edge));
             }
         }
     }

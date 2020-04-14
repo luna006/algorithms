@@ -45,7 +45,7 @@ int main(int argc, const char** argv) {
         } catch (std::invalid_argument& e) {
             std::cerr << e.what() << std::endl;
         }
-        std::cout << "Enter \'c\' to continue or \'q\' for quit: ";
+        std::cout << R"(Enter 'c' to continue or 'q' for quit: )";
         std::cin >> userInput;
         if (userInput != "c") {
             isContinue = false;
@@ -65,6 +65,7 @@ void processRequest(std::istream& inStream, Graph& graph) {
     if (!(inStream >> destinationVertexName)) {
         throw std::invalid_argument("Cannot read name of destination node");
     }
-    graph.unweighted(startVertexName);
+    //graph.unweighted(startVertexName);
+    graph.dijkstra(startVertexName);
     graph.printPath(destinationVertexName);
 }
