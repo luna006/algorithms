@@ -7,3 +7,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 add_subdirectory(test)
 add_subdirectory(src/graph)
+add_subdirectory(src/priority_queue)
