@@ -45,7 +45,7 @@ private:
 
 template<typename T>
 const T& StackOnArray<T>::top() const {
-    if (Stack<T>::isEmpty()) {
+    if (isEmpty()) {
         throw std::invalid_argument("<<< top() >>> Stack is empty");
     }
     return array[tos];
@@ -61,7 +61,7 @@ void StackOnArray<T>::push(const T &item) {
 
 template<typename T>
 void StackOnArray<T>::pop() {
-    if (Stack<T>::isEmpty()) {
+    if (isEmpty()) {
         throw std::invalid_argument("<<< pop >>> Stack is empty");
     }
     tos--;
@@ -69,7 +69,7 @@ void StackOnArray<T>::pop() {
 
 template<typename T>
 T StackOnArray<T>::topAndPop() {
-    if (Stack<T>::isEmpty()) {
+    if (isEmpty()) {
         throw std::invalid_argument("<<< topAndPop >>> Stack is empty");
     }
     return array[tos--];
