@@ -44,6 +44,42 @@ private:
 };
 
 template<typename T>
+class StackOnList : public Stack<T> {
+    template<typename TT>
+    friend void swap(StackOnList<TT>&, StackOnList<TT>&);
+public:
+    StackOnList() = default;
+    StackOnList(const StackOnList<T>& otherStack);
+    StackOnList<T>& operator=(StackOnList<T> otherStack);
+    ~StackOnList() {
+        clear();
+    }
+
+    bool isEmpty() const override {
+        return topOfStack == nullptr;
+    }
+    void clear() override;
+
+    const T& top() const override;
+    void push(const T& item) override;
+    void pop() override;
+    T topAndPop() override;
+
+private:
+    struct ListNode {
+        T element;
+        ListNode* next;
+
+        explicit ListNode(const T& element, ListNode* next = nullptr) : element(element), next(next) {}
+    };
+    ListNode* topOfStack = nullptr;
+
+    void moveNext(ListNode*& node) {
+        node = node->next;
+    }
+};
+
+template<typename T>
 const T& StackOnArray<T>::top() const {
     if (isEmpty()) {
         throw std::invalid_argument("<<< top() >>> Stack is empty");
@@ -73,6 +109,73 @@ T StackOnArray<T>::topAndPop() {
         throw std::invalid_argument("<<< topAndPop >>> Stack is empty");
     }
     return array[tos--];
+}
+
+template<typename T>
+StackOnList<T>::StackOnList(const StackOnList<T>& otherStack) {
+    if (!otherStack.isEmpty()) {
+        ListNode* currentNodeOfOtherStack = otherStack.topOfStack;
+        ListNode* currentNodeOfThisStack = new ListNode(currentNodeOfOtherStack->element);
+        topOfStack = currentNodeOfThisStack;
+        for (moveNext(currentNodeOfOtherStack); currentNodeOfOtherStack != nullptr; moveNext(currentNodeOfOtherStack)) {
+            currentNodeOfThisStack->next = new ListNode(currentNodeOfOtherStack->element);
+            moveNext(currentNodeOfThisStack);
+        }
+    }
+}
+
+template<typename T>
+inline void swap(StackOnList<T>& firstStack, StackOnList<T>& secondStack) {
+    using std::swap;
+    swap(firstStack.topOfStack, secondStack.topOfStack);
+}
+
+template<typename T>
+StackOnList<T>& StackOnList<T>::operator=(StackOnList<T> otherStack) {
+    swap(*this, otherStack);
+    return *this;
+}
+
+template<typename T>
+void StackOnList<T>::clear() {
+    ListNode* currentNode = topOfStack;
+    while (topOfStack) {
+        currentNode = topOfStack;
+        moveNext(topOfStack);
+        delete currentNode;
+    }
+}
+
+template<typename T>
+void StackOnList<T>::push(const T& item) {
+    topOfStack = new ListNode(item, topOfStack);
+}
+
+template<typename T>
+void StackOnList<T>::pop() {
+    if (isEmpty()) {
+        throw std::invalid_argument("<<< pop >> Stack is empty");
+    }
+    ListNode* oldTopOfStack = topOfStack;
+    moveNext(topOfStack);
+    delete oldTopOfStack;
+}
+
+template<typename T>
+const T& StackOnList<T>::top() const {
+    return topOfStack->element;
+}
+
+template<typename T>
+T StackOnList<T>::topAndPop() {
+    if (isEmpty()) {
+        throw std::invalid_argument("<<< pop >> Stack is empty");
+    }
+    T result = topOfStack->element;
+    ListNode* oldTopOfStack = topOfStack;
+    moveNext(topOfStack);
+    delete oldTopOfStack;
+    return result;
 }
 
 #endif //ALGORITHMS_STACK_H
