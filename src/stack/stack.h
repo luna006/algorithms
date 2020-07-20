@@ -45,8 +45,8 @@ private:
 
 template<typename T>
 class StackOnList : public Stack<T> {
-    template<typename TT>
-    friend void swap(StackOnList<TT>&, StackOnList<TT>&);
+    template<typename Object>
+    friend void swap(StackOnList<Object>&, StackOnList<Object>&);
 public:
     StackOnList() = default;
     StackOnList(const StackOnList<T>& otherStack);
@@ -74,7 +74,7 @@ private:
     };
     ListNode* topOfStack = nullptr;
 
-    void moveNext(ListNode*& node) {
+    static void moveNext(ListNode*& node) {
         node = node->next;
     }
 };

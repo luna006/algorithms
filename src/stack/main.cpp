@@ -5,7 +5,8 @@
 #include <iostream>
 #include "stack.h"
 
-void printStack(const std::shared_ptr<Stack<int>>& stackPtr);
+template<typename T>
+void printStack(const std::shared_ptr<Stack<T>>& stackPtr);
 
 int main() {
     std::shared_ptr<Stack<int>> stack = std::make_shared<StackOnArray<int>>();
@@ -26,7 +27,8 @@ int main() {
     return 0;
 }
 
-void printStack(const std::shared_ptr<Stack<int>>& stackPtr) {
+template<typename T>
+void printStack(const std::shared_ptr<Stack<T>>& stackPtr) {
     while (!stackPtr->isEmpty()) {
         std::cout << stackPtr->topAndPop() << std::endl;
     }
